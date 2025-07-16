@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🛠️ Admin Panel
+Este é um painel administrativo completo desenvolvido com foco em performance, organização e boas práticas. Nele é possível gerenciar usuários e produtos, com funcionalidades como criação, edição, deleção e visualização, além de gráficos e filtros avançados.
 
-## Getting Started
+🚀 Deploy
+Acesse o projeto em produção:
+https://cool-admin-panel.vercel.app/
 
-First, run the development server:
+📸 Funcionalidades
+👥 Gerenciamento de Usuários:
+Criar, editar, excluir e listar usuários.
+Filtros por nome, data de criação e status.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+📦 Gerenciamento de Produtos:
+Criar, editar, excluir e listar produtos.
+Filtros por nome, estoque, preço, categoria e status.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📊 Gráficos:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Gráfico de vendas do ano (mockado)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Gráfico com registros de usuários por mês
 
-## Learn More
+🔍 Busca e Ordenação Avançada:
 
-To learn more about Next.js, take a look at the following resources:
+Por nome, data, status, estoque, preço e categoria
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+🧪 Tecnologias Utilizadas
+Next.js
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+TypeScript
 
-## Deploy on Vercel
+Tailwind CSS
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Shadcn UI
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Recharts
+
+Firebase
+
+Lucide Icons
+
