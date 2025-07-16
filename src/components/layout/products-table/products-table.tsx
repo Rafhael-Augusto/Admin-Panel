@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, Plus } from "lucide-react";
-import type { Product, User } from "@/types";
+import type { Product } from "@/types";
 import { ProductForm } from "@/components/layout/product-form/product-form";
 
 import { useProduct } from "@/hooks/useData/products";
@@ -25,9 +25,16 @@ export function ProductsTable() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | undefined>();
   const [updatedProduct, setUpdatedProduct] = useState<Product[]>([]);
+  const [originalProducts, setOriginalProducts] = useState<Product[]>([]);
 
   const { getProducts, deleteProductFirebase } = useProduct();
-  const { FilterByName } = useSearch();
+  const {
+    FilterByName,
+    FilterByCategory,
+    FilterByStock,
+    FilterByStatus,
+    FilterByPrice,
+  } = useSearch();
 
   const fetchProducts = async () => {
     const productList = await getProducts();
@@ -38,41 +45,72 @@ export function ProductsTable() {
     fetchProducts();
   }, []);
 
-  const handleEdit = (product: Product) => {
+  useEffect(() => {
+    const fetchOriginal = async () => {
+      const users = await getProducts();
+      setOriginalProducts(users);
+    };
+
+    fetchOriginal();
+  }, [getProducts]);
+
+  const onProductEdit = (product: Product) => {
     setEditingProduct(product);
     setIsFormOpen(true);
   };
 
-  const handleFormDelete = (productId: string) => {
+  const onFormDelete = (productId: string) => {
     deleteProductFirebase(productId);
     fetchProducts();
   };
 
-  const handleFormClose = () => {
+  const onFormClose = () => {
     setIsFormOpen(false);
     setEditingProduct(undefined);
 
     fetchProducts();
   };
 
-  const handleFilter = (words: string, list: (User | Product)[]) => {
+  const handleFilter = (words: string) => {
     if (!words) {
       fetchProducts();
 
       return;
     }
 
-    const updatedList = FilterByName(words, list);
+    const updatedList = FilterByName(words, originalProducts);
     setUpdatedProduct(updatedList as Product[]);
   };
 
+  const sortList = (sort: string) => {
+    let filteredList;
+
+    switch (sort) {
+      case "price":
+        filteredList = FilterByPrice(updatedProduct);
+        break;
+      case "category":
+        filteredList = FilterByCategory(updatedProduct);
+        break;
+      case "stock":
+        filteredList = FilterByStock(updatedProduct);
+        break;
+      case "status":
+        filteredList = FilterByStatus(updatedProduct);
+        break;
+      default:
+        return;
+    }
+
+    setUpdatedProduct(filteredList);
+  };
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Produtos</h2>
         <div className="flex gap-5">
           <Input
-            onChange={(e) => handleFilter(e.target.value, updatedProduct)}
+            onChange={(e) => handleFilter(e.target.value)}
             className="bg-primary selection:bg-cyan-950 shadow-xs hover:bg-primary/95 text-white"
             placeholder="🔍 Buscar..."
           />
@@ -92,10 +130,30 @@ export function ProductsTable() {
             <TableHeader>
               <TableRow className="bg-gray-300 w-full">
                 <TableHead>Nome</TableHead>
-                <TableHead>Preço</TableHead>
-                <TableHead>Categoria</TableHead>
-                <TableHead>Estoque</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead
+                  onClick={() => sortList("price")}
+                  className="cursor-pointer hover:bg-gray-400"
+                >
+                  Preço
+                </TableHead>
+                <TableHead
+                  onClick={() => sortList("category")}
+                  className="cursor-pointer hover:bg-gray-400"
+                >
+                  Categoria
+                </TableHead>
+                <TableHead
+                  onClick={() => sortList("stock")}
+                  className="cursor-pointer hover:bg-gray-400"
+                >
+                  Estoque
+                </TableHead>
+                <TableHead
+                  onClick={() => sortList("status")}
+                  className="cursor-pointer hover:bg-gray-400"
+                >
+                  Status
+                </TableHead>
                 <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -132,14 +190,14 @@ export function ProductsTable() {
                         className="cursor-pointer"
                         variant="outline"
                         size="icon"
-                        onClick={() => handleEdit(product)}
+                        onClick={() => onProductEdit(product)}
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button
                         className="cursor-pointer"
                         onClick={() =>
-                          handleFormDelete(product.id ? product.id : "")
+                          onFormDelete(product.id ? product.id : "")
                         }
                         variant="outline"
                         size="icon"
@@ -160,7 +218,7 @@ export function ProductsTable() {
       <ProductForm
         product={editingProduct}
         isOpen={isFormOpen}
-        onClose={handleFormClose}
+        onClose={onFormClose}
       />
     </div>
   );

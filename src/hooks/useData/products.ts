@@ -35,7 +35,7 @@ export function useProduct() {
       category: newProductInfo.category ?? productInfo.category,
       stock: newProductInfo.stock ?? productInfo.stock,
       status: newProductInfo.status ?? productInfo.status,
-      createdAt: newProductInfo.createdAt ?? productInfo.createdAt,
+      createdAt: productInfo.createdAt,
     });
   };
 

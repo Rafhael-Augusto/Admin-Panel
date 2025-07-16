@@ -30,7 +30,7 @@ export function useUser() {
       email: newUserInfo.email ?? userInfo.email,
       role: newUserInfo.role ?? userInfo.role,
       status: newUserInfo.status ?? userInfo.status,
-      createdAt: newUserInfo.createdAt ?? userInfo.createdAt,
+      createdAt: userInfo.createdAt,
     });
   };
 

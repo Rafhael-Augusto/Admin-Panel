@@ -120,7 +120,7 @@ export function Charts() {
             <BarChart data={usersSeparated}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" tickFormatter={formatMonth} />
-              <YAxis />
+              <YAxis ticks={[0, 1, 2, 3, 4, 5]} />
               <Tooltip />
               <Bar dataKey="count" fill="#10b981" />
             </BarChart>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import LoadingScreen from "@/components/shared/loadingScreen";
-import { User, Product } from "@/types";
+import { Product, User } from "@/types";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,7 @@ import { UserForm } from "@/components/layout";
 
 import { useUser } from "@/hooks/useData/users";
 import { useSearch } from "@/hooks/useSearch";
+import { useFormattedDate } from "@/hooks/useFormattedData";
 
 import { Input } from "@/components/ui/input";
 
@@ -26,9 +27,11 @@ export function UsersTable() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | undefined>();
   const [updatedUsers, setUpdatedUsers] = useState<User[]>([]);
+  const [originalUsers, setOriginalUsers] = useState<User[]>([]);
 
   const { getUsers, deleteUserFirebase } = useUser();
-  const { FilterByName } = useSearch();
+  const { FilterByName, FilterByStatus, FilterByDate } = useSearch();
+  const { formatDate } = useFormattedDate();
 
   const fetchUsers = async () => {
     const usersList = await getUsers();
@@ -39,32 +42,58 @@ export function UsersTable() {
     fetchUsers();
   }, []);
 
-  const handleEdit = (user: User) => {
+  useEffect(() => {
+    const fetchOriginal = async () => {
+      const users = await getUsers();
+      setOriginalUsers(users);
+    };
+
+    fetchOriginal();
+  }, [getUsers]);
+
+  const onUserEdit = (user: User) => {
     setEditingUser(user);
     setIsFormOpen(true);
   };
 
-  const handleFormDelete = (userId: string) => {
+  const onFormDelete = (userId: string) => {
     deleteUserFirebase(userId);
     fetchUsers();
   };
 
-  const handleFormClose = () => {
+  const onFormClose = () => {
     setIsFormOpen(false);
     setEditingUser(undefined);
 
     fetchUsers();
   };
 
-  const handleFilter = (words: string, list: (User | Product)[]) => {
+  const handleFilter = async (words: string) => {
     if (!words) {
       fetchUsers();
 
       return;
     }
 
-    const updatedList = FilterByName(words, list);
+    const updatedList = FilterByName(words, originalUsers);
     setUpdatedUsers(updatedList as User[]);
+  };
+
+  const sortList = (sort: string) => {
+    let filteredList: (User | Product)[];
+
+    switch (sort) {
+      case "status":
+        filteredList = FilterByStatus(updatedUsers);
+        break;
+      case "date":
+        filteredList = FilterByDate(updatedUsers);
+        break;
+      default:
+        return;
+    }
+
+    setUpdatedUsers(filteredList as User[]);
   };
 
   return (
@@ -74,7 +103,7 @@ export function UsersTable() {
 
         <div className="flex gap-5">
           <Input
-            onChange={(e) => handleFilter(e.target.value, updatedUsers)}
+            onChange={(e) => handleFilter(e.target.value)}
             className="bg-primary selection:bg-cyan-950 shadow-xs hover:bg-primary/95 text-white"
             placeholder="🔍 Buscar..."
           />
@@ -96,8 +125,18 @@ export function UsersTable() {
                 <TableHead>Nome</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Função</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Data de Criação</TableHead>
+                <TableHead
+                  onClick={() => sortList("status")}
+                  className="cursor-pointer hover:bg-gray-400"
+                >
+                  Status
+                </TableHead>
+                <TableHead
+                  onClick={() => sortList("date")}
+                  className="cursor-pointer hover:bg-gray-400"
+                >
+                  Data de Criação
+                </TableHead>
                 <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -122,16 +161,14 @@ export function UsersTable() {
                       {user.status === "active" ? "Ativo" : "Inativo"}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    {new Date().toLocaleDateString("pt-BR")}
-                  </TableCell>
+                  <TableCell>{formatDate(user.createdAt)}</TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
                       <Button
                         className="cursor-pointer"
                         variant="outline"
                         size="icon"
-                        onClick={() => handleEdit(user)}
+                        onClick={() => onUserEdit(user)}
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
@@ -139,7 +176,7 @@ export function UsersTable() {
                         className="cursor-pointer"
                         variant="outline"
                         size="icon"
-                        onClick={() => handleFormDelete(user.id ? user.id : "")}
+                        onClick={() => onFormDelete(user.id ? user.id : "")}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -154,11 +191,7 @@ export function UsersTable() {
         <LoadingScreen />
       )}
 
-      <UserForm
-        user={editingUser}
-        isOpen={isFormOpen}
-        onClose={handleFormClose}
-      />
+      <UserForm user={editingUser} isOpen={isFormOpen} onClose={onFormClose} />
     </div>
   );
 }
