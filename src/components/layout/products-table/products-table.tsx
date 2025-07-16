@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, Plus } from "lucide-react";
-import type { Product } from "@/types";
+import type { Product, User } from "@/types";
 import { ProductForm } from "@/components/layout/product-form/product-form";
 
 import { useProduct } from "@/hooks/useData/products";
@@ -83,7 +83,7 @@ export function ProductsTable() {
   };
 
   const sortList = (sort: string) => {
-    let filteredList;
+    let filteredList: (User | Product)[];
 
     switch (sort) {
       case "price":
@@ -102,7 +102,7 @@ export function ProductsTable() {
         return;
     }
 
-    setUpdatedProduct(filteredList);
+    setUpdatedProduct(filteredList as Product[]);
   };
   return (
     <div>
