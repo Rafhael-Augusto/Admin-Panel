@@ -29,11 +29,11 @@ interface ProductFormProps {
   onClose: () => void;
 }
 
-import { useProduct } from "@/hooks/useData/products";
+import { utilProduct } from "@/components/lib/Data/products";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 export function ProductForm({ product, isOpen, onClose }: ProductFormProps) {
-  const { createProductFirebase, updateProductFirebase } = useProduct();
+  const { createProductFirebase, updateProductFirebase } = utilProduct();
 
   const [formData, setFormData] = useState({
     name: product?.name || "",

@@ -18,14 +18,14 @@ import {
 
 import { chartData } from "@/lib/mock-data";
 
-import { useUser } from "@/hooks/useData/users";
+import { utilUser } from "@/components/lib/Data/users";
 
 type MonthlyCount = { month: string; count: number };
 
 export function Charts() {
   const [usersSeparated, setUsersSeparated] = useState<MonthlyCount[]>([]);
 
-  const { getUsers } = useUser();
+  const { getUsers } = utilUser();
 
   useEffect(() => {
     const fetchData = async () => {

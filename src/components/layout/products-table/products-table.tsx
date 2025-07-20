@@ -17,8 +17,8 @@ import { Edit, Trash2, Plus } from "lucide-react";
 import type { Product, User } from "@/types";
 import { ProductForm } from "@/components/layout/product-form/product-form";
 
-import { useProduct } from "@/hooks/useData/products";
-import { useSearch } from "@/hooks/useSearch";
+import { utilProduct } from "@/components/lib/Data/products";
+import { utilSearch } from "@/components/lib/Search";
 import { Input } from "@/components/ui/input";
 
 export function ProductsTable() {
@@ -27,14 +27,14 @@ export function ProductsTable() {
   const [updatedProduct, setUpdatedProduct] = useState<Product[]>([]);
   const [originalProducts, setOriginalProducts] = useState<Product[]>([]);
 
-  const { getProducts, deleteProductFirebase } = useProduct();
+  const { getProducts, deleteProductFirebase } = utilProduct();
   const {
     FilterByName,
     FilterByCategory,
     FilterByStock,
     FilterByStatus,
     FilterByPrice,
-  } = useSearch();
+  } = utilSearch();
 
   const fetchProducts = async () => {
     const productList = await getProducts();

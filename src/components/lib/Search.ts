@@ -1,6 +1,6 @@
 import { Product, User } from "@/types";
 
-export function useSearch() {
+export function utilSearch() {
   const FilterByName = (searchWords: string, list: (User | Product)[]) => {
     const filteredItems = list.filter((item) =>
       item.name.toLowerCase().includes(searchWords.toLowerCase())

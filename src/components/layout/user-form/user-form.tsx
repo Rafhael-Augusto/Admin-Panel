@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import type { User } from "@/types";
 
-import { useUser } from "@/hooks/useData/users";
+import { utilUser } from "@/components/lib/Data/users";
 import { DialogDescription } from "@radix-ui/react-dialog";
 
 type UserStatus = "active" | "inactive";
@@ -34,7 +34,7 @@ interface UserFormProps {
 }
 
 export function UserForm({ user, isOpen, onClose }: UserFormProps) {
-  const { createUserFirebase, updateUsersFirebase } = useUser();
+  const { createUserFirebase, updateUsersFirebase } = utilUser();
 
   const [formData, setFormData] = useState({
     name: user?.name || "",

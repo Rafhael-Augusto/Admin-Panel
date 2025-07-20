@@ -1,4 +1,4 @@
-export function useFormattedDate() {
+export function utilFormattedDate() {
   const formatDate = (date: string | undefined) => {
     if (!date) return "";
 

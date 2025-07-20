@@ -17,9 +17,9 @@ import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, Plus } from "lucide-react";
 import { UserForm } from "@/components/layout";
 
-import { useUser } from "@/hooks/useData/users";
-import { useSearch } from "@/hooks/useSearch";
-import { useFormattedDate } from "@/hooks/useFormattedData";
+import { utilUser } from "@/components/lib/Data/users";
+import { utilSearch } from "@/components/lib/Search";
+import { utilFormattedDate } from "@/components/lib/FormattedData";
 
 import { Input } from "@/components/ui/input";
 
@@ -29,9 +29,9 @@ export function UsersTable() {
   const [updatedUsers, setUpdatedUsers] = useState<User[]>([]);
   const [originalUsers, setOriginalUsers] = useState<User[]>([]);
 
-  const { getUsers, deleteUserFirebase } = useUser();
-  const { FilterByName, FilterByStatus, FilterByDate } = useSearch();
-  const { formatDate } = useFormattedDate();
+  const { getUsers, deleteUserFirebase } = utilUser();
+  const { FilterByName, FilterByStatus, FilterByDate } = utilSearch();
+  const { formatDate } = utilFormattedDate();
 
   const fetchUsers = async () => {
     const usersList = await getUsers();

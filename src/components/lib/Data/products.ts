@@ -9,7 +9,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-export function useProduct() {
+export function utilProduct() {
   const createProductFirebase = async (productInfo: Product) => {
     await addDoc(collection(db, "products"), {
       name: productInfo.name,

@@ -9,7 +9,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-export function useUser() {
+export function utilUser() {
   const createUserFirebase = async (userInfo: User) => {
     await addDoc(collection(db, "users"), {
       name: userInfo.name,

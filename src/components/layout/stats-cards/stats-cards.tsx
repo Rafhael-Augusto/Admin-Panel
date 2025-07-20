@@ -1,7 +1,7 @@
 "use client";
 
-import { useUser } from "@/hooks/useData/users";
-import { useProduct } from "@/hooks/useData/products";
+import { utilUser } from "@/components/lib/Data/users";
+import { utilProduct } from "@/components/lib/Data/products";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Package, DollarSign, ShoppingCart } from "lucide-react";
@@ -13,8 +13,8 @@ export function StatsCards() {
   const [users, setUsers] = useState<User[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
 
-  const { getUsers } = useUser();
-  const { getProducts } = useProduct();
+  const { getUsers } = utilUser();
+  const { getProducts } = utilProduct();
 
   useEffect(() => {
     const fetchUsers = async () => {
